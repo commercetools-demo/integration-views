@@ -49,6 +49,7 @@
     "@commercetools-uikit/loading-spinner": "^19.6.0",
     "@commercetools-uikit/localized-text-field": "^19.6.0",
     "@commercetools-uikit/localized-text-input": "^19.6.0",
+    "@commercetools-uikit/multiline-text-field": "^19.6.0",
     "@commercetools-uikit/notifications": "^19.6.0",
     "@commercetools-uikit/pagination": "^19.6.0",
     "@commercetools-uikit/select-field": "^19.6.0",

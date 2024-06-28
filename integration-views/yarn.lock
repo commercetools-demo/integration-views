@@ -2423,6 +2423,50 @@
     prop-types "15.8.1"
     react-intl "^6.3.2"
 
+"@commercetools-uikit/multiline-text-field@^19.6.0":
+  version "19.6.0"
+  resolved "https://registry.yarnpkg.com/@commercetools-uikit/multiline-text-field/-/multiline-text-field-19.6.0.tgz#e8991258ae5e69733223450698760eca9510acde"
+  integrity sha512-8j5QkANcGFmfSuk4BbMye++UlYMjxW4ZWq/Q4NbrmVrfe7UNh0ronPXkFUlulku2iJobKuR5nq6IDvhVS+0NsQ==
+  dependencies:
+    "@babel/runtime" "^7.20.13"
+    "@babel/runtime-corejs3" "^7.20.13"
+    "@commercetools-uikit/constraints" "19.6.0"
+    "@commercetools-uikit/design-system" "19.6.0"
+    "@commercetools-uikit/field-errors" "19.6.0"
+    "@commercetools-uikit/field-label" "19.6.0"
+    "@commercetools-uikit/field-warnings" "19.6.0"
+    "@commercetools-uikit/multiline-text-input" "19.6.0"
+    "@commercetools-uikit/spacings" "19.6.0"
+    "@commercetools-uikit/utils" "19.6.0"
+    "@emotion/react" "^11.10.5"
+    "@emotion/styled" "^11.10.5"
+    prop-types "15.8.1"
+    react-intl "^6.3.2"
+
+"@commercetools-uikit/multiline-text-input@19.6.0":
+  version "19.6.0"
+  resolved "https://registry.yarnpkg.com/@commercetools-uikit/multiline-text-input/-/multiline-text-input-19.6.0.tgz#d4b592c27ba07d567734c189b88e7c3b018466b4"
+  integrity sha512-Ugc6ifgz9QTeg/UCNgVDXSBCUeGp5VOzXMv8GXaD+QiEw6h4K5QCXaR4uZ2hR5Rcbd5uoT4wEvtKoD7eUAlxKA==
+  dependencies:
+    "@babel/runtime" "^7.20.13"
+    "@babel/runtime-corejs3" "^7.20.13"
+    "@commercetools-uikit/constraints" "19.6.0"
+    "@commercetools-uikit/design-system" "19.6.0"
+    "@commercetools-uikit/flat-button" "19.6.0"
+    "@commercetools-uikit/hooks" "19.6.0"
+    "@commercetools-uikit/icons" "19.6.0"
+    "@commercetools-uikit/input-utils" "19.6.0"
+    "@commercetools-uikit/secondary-icon-button" "19.6.0"
+    "@commercetools-uikit/spacings-inline" "19.6.0"
+    "@commercetools-uikit/spacings-stack" "19.6.0"
+    "@commercetools-uikit/tooltip" "19.6.0"
+    "@commercetools-uikit/utils" "19.6.0"
+    "@emotion/react" "^11.10.5"
+    "@emotion/styled" "^11.10.5"
+    downshift "6.1.12"
+    prop-types "15.8.1"
+    react-textarea-autosize "8.4.0"
+
 "@commercetools-uikit/notifications@^19.2.0", "@commercetools-uikit/notifications@^19.6.0":
   version "19.6.0"
   resolved "https://registry.yarnpkg.com/@commercetools-uikit/notifications/-/notifications-19.6.0.tgz#ff9589fc1402e98ca09aa1dc4ed189e62fb2d673"

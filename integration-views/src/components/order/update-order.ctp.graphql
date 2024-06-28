@@ -1,0 +1,5 @@
+mutation UpdateOrder($id: String, $version: Long!, $actions: [OrderUpdateAction!]!) {
+    updateOrder(id: $id, version: $version, actions: $actions) {
+        id
+    }
+}

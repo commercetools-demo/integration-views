@@ -9,7 +9,10 @@ import {
 import { ContentNotification } from '@commercetools-uikit/notifications';
 import { getErrorMessage } from '../../helpers';
 import Text from '@commercetools-uikit/text';
-import { InfoMainPage } from '@commercetools-frontend/application-components';
+import {
+  InfoMainPage,
+  useModalState,
+} from '@commercetools-frontend/application-components';
 import Card from '@commercetools-uikit/card';
 import Spacings from '@commercetools-uikit/spacings';
 import DataTable from '@commercetools-uikit/data-table';
@@ -30,12 +33,14 @@ import {
 import SecondaryButton from '@commercetools-uikit/secondary-button';
 import PrimaryButton from '@commercetools-uikit/primary-button';
 import { ComponentProps } from '../../routes';
+import LogComplaint from '../log-complaint/log-complaint';
 
 const Order: FC<ComponentProps> = ({ id }) => {
   const { dataLocale, projectLanguages } = useCustomViewContext((context) => ({
     dataLocale: context.dataLocale,
     projectLanguages: context.project?.languages,
   }));
+  const { openModal, isModalOpen, closeModal } = useModalState();
   const createStepsDefinition = useMemo(
     () => [
       {
@@ -155,6 +160,7 @@ const Order: FC<ComponentProps> = ({ id }) => {
             <SecondaryButton
               iconLeft={<SpeechBubbleIcon />}
               label={'Log Complaint'}
+              onClick={openModal}
             />
             <SecondaryButton
               iconLeft={<ExportIcon />}
@@ -267,6 +273,13 @@ const Order: FC<ComponentProps> = ({ id }) => {
           </Grid>
         </Spacings.Stack>
       </Card>
+      {data?.order && (
+        <LogComplaint
+          isModalOpen={isModalOpen}
+          closeModal={closeModal}
+          order={data.order}
+        />
+      )}
     </InfoMainPage>
   );
 };

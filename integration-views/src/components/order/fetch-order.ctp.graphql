@@ -1,5 +1,7 @@
 query FetchOrder($id: String) {
     order(id: $id) {
+        id
+        version
         customerId
         orderState
         purchaseOrderNumber
@@ -9,6 +11,15 @@ query FetchOrder($id: String) {
             streetNumber
             postalCode
             city
+        }
+        custom {
+            type {
+                key
+            }
+            customFieldsRaw {
+                name
+                value
+            }
         }
         lineItems {
             key
