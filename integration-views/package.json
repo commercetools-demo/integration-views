@@ -94,7 +94,7 @@
     "commercetools-demo-shared-helpers": "^1.0.1",
     "commercetools-demo-shared-paginatable-data-table": "^1.0.0",
     "commercetools-demo-shared-stepper": "^1.0.0",
-    "commercetools-demo-shared-predicate-builder": "^0.0.1",
+    "commercetools-demo-shared-predicate-builder": "^0.0.2",
     "eslint": "8.57.0",
     "eslint-formatter-pretty": "4.1.0",
     "eslint-plugin-graphql": "^4.0.0",
