@@ -1,6 +1,5 @@
-import Spacings from '@commercetools-uikit/spacings';
-import { CheckActiveIcon } from '@commercetools-uikit/icons';
-import Text from '@commercetools-uikit/text';
+import { Icon, Stack, Text } from '@commercetools/nimbus';
+import { CheckCircle } from '@commercetools/nimbus-icons';
 import { FormattedDate } from 'react-intl';
 import { FC } from 'react';
 
@@ -11,19 +10,19 @@ export type DetailsItemProps = {
 };
 const OrderDetailsItem: FC<DetailsItemProps> = ({ date, headline, body }) => {
   return (
-    <Spacings.Inline alignItems={'center'}>
-      <CheckActiveIcon color={'primary'} />
+    <Stack direction="row" align="center">
+      <Icon as={CheckCircle} color="primary.11" />
 
-      <Spacings.Stack scale={'xs'}>
-        <Text.Caption>
+      <Stack direction="column" gap="100">
+        <Text textStyle="xs">
           <FormattedDate value={date} />
-        </Text.Caption>
-        <Spacings.Inline>
-          <Text.Headline as={'h3'}>{headline}:</Text.Headline>
-          <Text.Body>{body}</Text.Body>
-        </Spacings.Inline>
-      </Spacings.Stack>
-    </Spacings.Inline>
+        </Text>
+        <Stack direction="row" gap="200">
+          <Text fontWeight="bold">{headline}:</Text>
+          <Text>{body}</Text>
+        </Stack>
+      </Stack>
+    </Stack>
   );
 };
 

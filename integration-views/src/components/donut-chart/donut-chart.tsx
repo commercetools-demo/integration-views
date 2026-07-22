@@ -4,7 +4,7 @@ import { Group } from '@visx/group';
 import { Pie } from '@visx/shape';
 import ChartLegend from './chart-legend';
 import ChartTooltip from './chart-tooltip';
-import Spacings from '@commercetools-uikit/spacings';
+import { Stack } from '@commercetools/nimbus';
 
 export type Data = {
   name: string;
@@ -79,8 +79,8 @@ const DonutChart = ({
   return (
     <ChartTooltip formatTooltipLabel={formatTooltipLabel}>
       {(showTooltip, hideTooltip, tooltipData) => (
-        <Spacings.Stack scale="m">
-          <Spacings.Inline justifyContent="center">
+        <Stack direction="column" gap="400">
+          <Stack direction="row" justify="center">
             <svg width={width} height={height} role="img">
               <Group top={top} left={left}>
                 <Pie
@@ -131,9 +131,9 @@ const DonutChart = ({
                 </Pie>
               </Group>
             </svg>
-          </Spacings.Inline>
+          </Stack>
           <ChartLegend data={data} />
-        </Spacings.Stack>
+        </Stack>
       )}
     </ChartTooltip>
   );

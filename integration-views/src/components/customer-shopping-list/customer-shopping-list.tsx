@@ -12,17 +12,20 @@ import {
   useShoppingListFetcher,
   useShoppingListUpdater,
 } from 'commercetools-demo-shared-data-fetching-hooks';
-import { ContentNotification } from '@commercetools-uikit/notifications';
-import Text from '@commercetools-uikit/text';
-import Spacings from '@commercetools-uikit/spacings';
-import LoadingSpinner from '@commercetools-uikit/loading-spinner';
+import {
+  Accordion,
+  Alert,
+  Box,
+  Heading,
+  LoadingSpinner,
+  Stack,
+  Text,
+} from '@commercetools/nimbus';
 import { TShoppingListUpdateAction } from '../../types/generated/ctp';
 
 import { DOMAINS } from '@commercetools-frontend/constants';
 import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
 import { useShowNotification } from '@commercetools-frontend/actions-global';
-import Constraints from '@commercetools-uikit/constraints';
-import CollapsiblePanel from '@commercetools-uikit/collapsible-panel';
 import { PERMISSIONS } from '../../constants';
 import {
   ProductVariantSelector,
@@ -66,16 +69,16 @@ export const CustomerShoppingList: FC<Props> = ({ onClose }) => {
   }, [shoppingList?.lineItems]);
   if (error) {
     return (
-      <ContentNotification type="error">
-        <Text.Body>{getErrorMessage(error)}</Text.Body>
-      </ContentNotification>
+      <Alert.Root colorPalette="critical">
+        <Alert.Description>{getErrorMessage(error)}</Alert.Description>
+      </Alert.Root>
     );
   }
   if (loading) {
     return (
-      <Spacings.Stack alignItems="center">
+      <Stack direction="column" align="center">
         <LoadingSpinner />
-      </Spacings.Stack>
+      </Stack>
     );
   }
   if (!shoppingList) {
@@ -156,19 +159,19 @@ export const CustomerShoppingList: FC<Props> = ({ onClose }) => {
         </>
       }
     >
-      <Spacings.Stack scale="xxl">
-        <Spacings.Stack scale="s">
-          <Spacings.Inline justifyContent="space-between" scale="l">
-            <Constraints.Horizontal max={11}>
-              <Spacings.Stack scale="m">
-                <Text.Headline as="h2">Add Item</Text.Headline>
-                <Text.Subheadline as="h5">
-                  Add items to your shopping cart.
-                </Text.Subheadline>
-              </Spacings.Stack>
-            </Constraints.Horizontal>
-          </Spacings.Inline>
-          <Constraints.Horizontal max={13}>
+      <Stack direction="column" gap="1200">
+        <Stack direction="column" gap="200">
+          <Stack direction="row" justify="space-between" gap="600">
+            <Box maxWidth="lg">
+              <Stack direction="column" gap="400">
+                <Heading as="h2" size="lg">
+                  Add Item
+                </Heading>
+                <Text textStyle="xl">Add items to your shopping cart.</Text>
+              </Stack>
+            </Box>
+          </Stack>
+          <Box maxWidth="2xl">
             <ProductVariantSelector
               name={'variantSearch'}
               onChange={async (event) => {
@@ -177,35 +180,43 @@ export const CustomerShoppingList: FC<Props> = ({ onClose }) => {
                 );
               }}
             />
-          </Constraints.Horizontal>
-        </Spacings.Stack>
-        <CollapsiblePanel
-          header={
-            <CollapsiblePanel.Header>
+          </Box>
+        </Stack>
+        <Accordion.Root
+          expandedKeys={shoppingListPanelClosed ? [] : ['shopping-list']}
+          onExpandedChange={(keys) =>
+            setShoppingListPanelClosed(
+              !Array.from(keys as Iterable<string>).includes('shopping-list')
+            )
+          }
+        >
+          <Accordion.Item value="shopping-list">
+            <Accordion.Header>
               {!shoppingList.lineItems || shoppingList.lineItems.length === 0
                 ? 'Shopping List (empty)'
                 : 'Shopping List'}
-            </CollapsiblePanel.Header>
-          }
-          isClosed={shoppingListPanelClosed}
-          onToggle={() => setShoppingListPanelClosed(!shoppingListPanelClosed)}
-        >
-          {shoppingList.lineItems && (
-            <PaginatableDataTable
-              visibleColumns={defaultShoppingListColumnsDefinition({ intl })}
-              rows={shoppingList.lineItems}
-              columns={defaultShoppingListColumnsDefinition({ intl })}
-              itemRenderer={defaultShoppingListItemRenderer(
-                dataLocale,
-                projectLanguages,
-                canManage,
-                handleRemoveLineItem,
-                handleChangeQuantity
+            </Accordion.Header>
+            <Accordion.Content>
+              {shoppingList.lineItems && (
+                <PaginatableDataTable
+                  visibleColumns={defaultShoppingListColumnsDefinition({
+                    intl,
+                  })}
+                  rows={shoppingList.lineItems}
+                  columns={defaultShoppingListColumnsDefinition({ intl })}
+                  itemRenderer={defaultShoppingListItemRenderer(
+                    dataLocale,
+                    projectLanguages,
+                    canManage,
+                    handleRemoveLineItem,
+                    handleChangeQuantity
+                  )}
+                />
               )}
-            />
-          )}
-        </CollapsiblePanel>
-      </Spacings.Stack>
+            </Accordion.Content>
+          </Accordion.Item>
+        </Accordion.Root>
+      </Stack>
     </CustomFormModalPage>
   );
 };

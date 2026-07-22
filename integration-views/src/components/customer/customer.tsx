@@ -1,22 +1,13 @@
 import { FC } from 'react';
-import { ContentNotification } from '@commercetools-uikit/notifications';
-import Text from '@commercetools-uikit/text';
+import { Alert, Button, Heading, Icon, Stack } from '@commercetools/nimbus';
+import { Add, Download, Chat } from '@commercetools/nimbus-icons';
 import {
   TabHeader,
   TabularMainPage,
 } from '@commercetools-frontend/application-components';
-import Spacings from '@commercetools-uikit/spacings';
-import {
-  PlusBoldIcon,
-  ExportIcon,
-  SpeechBubbleIcon,
-} from '@commercetools-uikit/icons';
-import SecondaryButton from '@commercetools-uikit/secondary-button';
-import PrimaryButton from '@commercetools-uikit/primary-button';
 import { ComponentProps } from '../../routes';
 import { Route, Switch, useRouteMatch } from 'react-router';
 import CustomerDashboard from '../customer-dashboard/customer-dashboard';
-import CustomerCarts from '../customer-carts/customer-carts';
 import CustomerActions from '../customer-actions/customer-actions';
 import CustomerShoppingLists from '../customer-shopping-lists/customer-shopping-lists';
 import {
@@ -32,37 +23,42 @@ const Customer: FC<ComponentProps> = ({ id }) => {
 
   if (error) {
     return (
-      <ContentNotification type="error">
-        <Text.Body>{getErrorMessage(error)}</Text.Body>
-      </ContentNotification>
+      <Alert.Root colorPalette="critical">
+        <Alert.Description>{getErrorMessage(error)}</Alert.Description>
+      </Alert.Root>
     );
   }
 
   if (!loading && !customer) {
     return (
-      <ContentNotification type="info">
-        <Text.Body>No Results</Text.Body>
-      </ContentNotification>
+      <Alert.Root colorPalette="info">
+        <Alert.Description>No Results</Alert.Description>
+      </Alert.Root>
     );
   }
 
   return (
     <TabularMainPage
       customTitleRow={
-        <Spacings.Inline justifyContent="space-between">
-          <Text.Headline as="h2">Customer View</Text.Headline>
-          <Spacings.Inline justifyContent="space-between">
-            <PrimaryButton iconLeft={<PlusBoldIcon />} label={'Open in CRM'} />
-            <SecondaryButton
-              iconLeft={<SpeechBubbleIcon />}
-              label={'Log Complaint'}
-            />
-            <SecondaryButton
-              iconLeft={<ExportIcon />}
-              label={'Export as XLS'}
-            />
-          </Spacings.Inline>
-        </Spacings.Inline>
+        <Stack direction="row" justify="space-between">
+          <Heading as="h2" size="xl">
+            Customer View
+          </Heading>
+          <Stack direction="row" gap="200">
+            <Button variant="solid" colorPalette="primary">
+              <Icon as={Add} />
+              Open in CRM
+            </Button>
+            <Button variant="outline" colorPalette="primary">
+              <Icon as={Chat} />
+              Log Complaint
+            </Button>
+            <Button variant="outline" colorPalette="primary">
+              <Icon as={Download} />
+              Export as XLS
+            </Button>
+          </Stack>
+        </Stack>
       }
       tabControls={
         <>
@@ -71,10 +67,9 @@ const Customer: FC<ComponentProps> = ({ id }) => {
             label="Customer Dashboard"
             exactPathMatch={true}
           />
-          <TabHeader to={`${match.url}/carts`} label="Carts" />
           <TabHeader to={`${match.url}/shopping-lists`} label="Shopping List" />
           {(customer?.isEmailVerified === undefined ||
-            customer?.isEmailVerified === false) && (
+            !customer?.isEmailVerified) && (
             <TabHeader to={`${match.url}/actions`} label="Customer Actions" />
           )}
         </>
@@ -83,9 +78,6 @@ const Customer: FC<ComponentProps> = ({ id }) => {
       <Switch>
         <Route path={`${match.path}`} exact={true}>
           <CustomerDashboard />
-        </Route>
-        <Route path={`${match.path}/carts`}>
-          <CustomerCarts id={id} />
         </Route>
         <Route path={`${match.path}/shopping-lists`}>
           <CustomerShoppingLists id={id} />

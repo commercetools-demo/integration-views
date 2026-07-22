@@ -1,9 +1,6 @@
 import { FC } from 'react';
-import Spacings from '@commercetools-uikit/spacings';
-import Text from '@commercetools-uikit/text';
+import { Alert, LoadingSpinner, Stack } from '@commercetools/nimbus';
 import { TCart } from '../../types/generated/ctp';
-import { ContentNotification } from '@commercetools-uikit/notifications';
-import LoadingSpinner from '@commercetools-uikit/loading-spinner';
 import { PageNotFound } from '@commercetools-frontend/application-components';
 import { CartDetailsGeneralInfoHeader as ExternalCartDetailsGeneralInfoHeader } from 'commercetools-demo-shared-cart-handling';
 import {
@@ -20,16 +17,16 @@ const CartDetailsGeneralInfoHeader: FC<Props> = ({ cart }) => {
   });
   if (error) {
     return (
-      <ContentNotification type="error">
-        <Text.Body>{getErrorMessage(error)}</Text.Body>
-      </ContentNotification>
+      <Alert.Root colorPalette="critical">
+        <Alert.Description>{getErrorMessage(error)}</Alert.Description>
+      </Alert.Root>
     );
   }
   if (loading) {
     return (
-      <Spacings.Stack alignItems="center">
+      <Stack direction="column" align="center">
         <LoadingSpinner />
-      </Spacings.Stack>
+      </Stack>
     );
   }
 

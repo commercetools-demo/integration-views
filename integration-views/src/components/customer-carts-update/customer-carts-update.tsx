@@ -1,6 +1,4 @@
 import { FC } from 'react';
-import Spacings from '@commercetools-uikit/spacings';
-import Text from '@commercetools-uikit/text';
 import {
   ConfirmationDialog,
   useModalState,
@@ -16,6 +14,7 @@ import {
 import { useCustomViewContext } from '@commercetools-frontend/application-shell-connectors';
 import { useShowNotification } from '@commercetools-frontend/actions-global';
 import { DOMAINS } from '@commercetools-frontend/constants';
+import { Stack, Text } from '@commercetools/nimbus';
 
 type Props = {
   action: 'delete' | 'freeze' | 'unfreeze';
@@ -100,9 +99,9 @@ export const CustomerCartsUpdate: FC<Props> = ({
       onConfirm={handleConfirm}
       isPrimaryButtonDisabled={disableConfirmation}
     >
-      <Spacings.Stack scale="m">
-        <Text.Body>{intl.formatMessage(messageTitle)}</Text.Body>
-      </Spacings.Stack>
+      <Stack direction="column" gap="400">
+        <Text>{intl.formatMessage(messageTitle)}</Text>
+      </Stack>
     </ConfirmationDialog>
   );
 };

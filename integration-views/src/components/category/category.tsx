@@ -1,6 +1,5 @@
 import { FC } from 'react';
-import { ContentNotification } from '@commercetools-uikit/notifications';
-import Text from '@commercetools-uikit/text';
+import { Alert, LoadingSpinner } from '@commercetools/nimbus';
 import { ComponentProps } from '../../routes';
 import {
   getErrorMessage,
@@ -11,7 +10,6 @@ import {
 } from 'commercetools-demo-shared-data-fetching-hooks';
 import { useShowNotification } from '@commercetools-frontend/actions-global';
 import CategoryPredicateField from './category-predicate-field';
-import LoadingSpinner from '@commercetools-uikit/loading-spinner';
 
 export type TFormValues = {
   predicateField?: string;
@@ -72,17 +70,17 @@ const Category: FC<ComponentProps> = ({ id }) => {
 
   if (error) {
     return (
-      <ContentNotification type="error">
-        <Text.Body>{getErrorMessage(error)}</Text.Body>
-      </ContentNotification>
+      <Alert.Root colorPalette="critical">
+        <Alert.Description>{getErrorMessage(error)}</Alert.Description>
+      </Alert.Root>
     );
   }
 
   if (stateError) {
     return (
-      <ContentNotification type="error">
-        <Text.Body>{getErrorMessage(stateError)}</Text.Body>
-      </ContentNotification>
+      <Alert.Root colorPalette="critical">
+        <Alert.Description>{getErrorMessage(stateError)}</Alert.Description>
+      </Alert.Root>
     );
   }
 
@@ -92,9 +90,9 @@ const Category: FC<ComponentProps> = ({ id }) => {
 
   if (!category) {
     return (
-      <ContentNotification type="info">
-        <Text.Body>No Results</Text.Body>
-      </ContentNotification>
+      <Alert.Root colorPalette="info">
+        <Alert.Description>No Results</Alert.Description>
+      </Alert.Root>
     );
   }
 
@@ -105,9 +103,9 @@ const Category: FC<ComponentProps> = ({ id }) => {
     )
   ) {
     return (
-      <ContentNotification type="info">
-        <Text.Body>{`Missing Type with key "dynamic-category-assignment" for "category" with string field "predicateField"`}</Text.Body>
-      </ContentNotification>
+      <Alert.Root colorPalette="info">
+        <Alert.Description>{`Missing Type with key "dynamic-category-assignment" for "category" with string field "predicateField"`}</Alert.Description>
+      </Alert.Root>
     );
   }
 

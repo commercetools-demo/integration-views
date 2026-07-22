@@ -4,6 +4,7 @@ import {
   CustomViewShell,
   setupGlobalErrorListener,
 } from '@commercetools-frontend/application-shell';
+import { NimbusProvider, NimbusI18nProvider } from '@commercetools/nimbus';
 import loadMessages from '../../load-messages';
 import { generatedIntrospection } from 'commercetools-demo-shared-helpers';
 
@@ -26,12 +27,16 @@ const configureApollo = () =>
   });
 
 const EntryPoint = () => (
-  <CustomViewShell
-    applicationMessages={loadMessages}
-    apolloClient={configureApollo()}
-  >
-    <AsyncApplicationRoutes />
-  </CustomViewShell>
+  <NimbusProvider>
+    <NimbusI18nProvider locale="en-US">
+      <CustomViewShell
+        applicationMessages={loadMessages}
+        apolloClient={configureApollo()}
+      >
+        <AsyncApplicationRoutes />
+      </CustomViewShell>
+    </NimbusI18nProvider>
+  </NimbusProvider>
 );
 
 EntryPoint.displayName = 'EntryPoint';

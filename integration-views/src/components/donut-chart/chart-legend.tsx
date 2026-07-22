@@ -1,10 +1,10 @@
 import { css } from '@emotion/react';
 import { LegendItem, LegendLabel } from '@visx/legend';
 import type { Data } from './donut-chart';
-import { customProperties } from '@commercetools-uikit/design-system';
-import Text from '@commercetools-uikit/text';
+import { Text } from '@commercetools/nimbus';
 
 const legendGlyphSize = 9;
+const legendItemGap = '8px';
 
 const ChartLegend = ({ data }: { data: Data[] }) => {
   return (
@@ -17,7 +17,7 @@ const ChartLegend = ({ data }: { data: Data[] }) => {
       {data.map((datum, i) => (
         <LegendItem
           key={`legend-item-${i}`}
-          margin={`0 ${i === 0 ? 0 : customProperties.spacing20}`}
+          margin={`0 ${i === 0 ? 0 : legendItemGap}`}
         >
           <svg width={legendGlyphSize} height={legendGlyphSize}>
             <circle
@@ -27,11 +27,10 @@ const ChartLegend = ({ data }: { data: Data[] }) => {
               cy={legendGlyphSize / 2}
             />
           </svg>
-          <LegendLabel
-            align="left"
-            margin={`0 0 0 ${customProperties.spacing20}`}
-          >
-            <Text.Detail tone="secondary">{datum.name}</Text.Detail>
+          <LegendLabel align="left" margin={`0 0 0 ${legendItemGap}`}>
+            <Text textStyle="sm" color="neutral.11">
+              {datum.name}
+            </Text>
           </LegendLabel>
         </LegendItem>
       ))}

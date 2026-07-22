@@ -1,32 +1,46 @@
-import Card from '@commercetools-uikit/card';
-import Spacings from '@commercetools-uikit/spacings';
-import { CheckActiveIcon, ListIcon } from '@commercetools-uikit/icons';
-import Text from '@commercetools-uikit/text';
-import Stamp from '@commercetools-uikit/stamp';
-import { FC, ReactElement } from 'react';
-import { TTone } from '@commercetools-uikit/stamp/dist/declarations/src/stamp';
-import FlatButton from '@commercetools-uikit/flat-button';
-import DonutChart from '../donut-chart';
+import { ElementType, FC } from 'react';
 import { useIntl } from 'react-intl';
+import {
+  Badge,
+  Box,
+  Button,
+  Card,
+  Icon,
+  Stack,
+  Text,
+} from '@commercetools/nimbus';
+import { List } from '@commercetools/nimbus-icons';
+import DonutChart from '../donut-chart';
 import { Data } from '../donut-chart/donut-chart';
 import OrderDetailsItem, {
   DetailsItemProps,
 } from '../order/order-details-item';
-import styled from '@emotion/styled';
 
-const InfoCardBox = styled.div`
-  padding: var(--spacing-30, 16px) 0;
-  border-top: var(--border-width-1, 1px) solid
-    var(--color-solid-10, hsl(0deg 0% 10% / 10%));
-  border-bottom: var(--border-width-1, 1px) solid
-    var(--color-solid-10, hsl(0deg 0% 10% / 10%));
-`;
+type InfoTone =
+  | 'positive'
+  | 'critical'
+  | 'warning'
+  | 'information'
+  | 'primary'
+  | 'secondary';
+
+const toneToColorPalette: Record<
+  InfoTone,
+  'positive' | 'critical' | 'warning' | 'info' | 'primary' | 'neutral'
+> = {
+  positive: 'positive',
+  critical: 'critical',
+  warning: 'warning',
+  information: 'info',
+  primary: 'primary',
+  secondary: 'neutral',
+};
 
 type Props = {
   title: string;
   text?: string;
-  icon?: ReactElement;
-  infos?: Array<{ label: string; tone: TTone; value: string }>;
+  icon?: ElementType;
+  infos?: Array<{ label: string; tone: InfoTone; value: string }>;
   data?: Array<Data>;
   listData?: Array<DetailsItemProps>;
   ctaText?: string;
@@ -35,7 +49,7 @@ type Props = {
 const InfoCard: FC<Props> = ({
   title,
   text,
-  icon = <CheckActiveIcon color={'neutral60'} />,
+  icon,
   infos,
   data,
   listData,
@@ -43,66 +57,78 @@ const InfoCard: FC<Props> = ({
 }) => {
   const { formatNumber } = useIntl();
   return (
-    <Card theme="light" type="raised">
-      <Spacings.Stack scale={'s'}>
-        <Spacings.Inline
-          scale={'s'}
-          alignItems={'center'}
-          justifyContent={'flex-start'}
-        >
-          {icon}
-          <Text.Subheadline as={'h5'} tone={'secondary'}>
+    <Card.Root>
+      <Card.Header>
+        <Stack direction="row" gap="300" align="center" justify="flex-start">
+          {icon && <Icon as={icon} color="neutral.9" size="2xs" />}
+          <Text textStyle="md" color="neutral.11" fontWeight={'500'}>
             {title}
-          </Text.Subheadline>
-        </Spacings.Inline>
-        {text && <Text.Headline as={'h3'}>{text}</Text.Headline>}
-        {infos && (
-          <InfoCardBox>
-            <Spacings.Stack scale={'s'}>
-              {infos.map((value, index) => (
-                <Spacings.Inline
-                  scale={'s'}
-                  justifyContent={'space-between'}
-                  key={index}
-                >
-                  <Stamp
-                    isCondensed={true}
-                    label={value.label}
-                    tone={value.tone}
-                  />
-                  <Text.Body>{value.value}</Text.Body>
-                </Spacings.Inline>
+          </Text>
+        </Stack>
+      </Card.Header>
+      <Card.Body>
+        <Stack direction="column" gap="300">
+          {text && (
+            <Text textStyle="lg" fontWeight="500">
+              {text}
+            </Text>
+          )}
+          {infos && (
+            <Box
+              borderTop="solid-25"
+              borderTopColor="neutral.6"
+              borderBottom="solid-25"
+              borderBottomColor="neutral.6"
+              py="400"
+            >
+              <Stack direction="column" gap="300">
+                {infos.map((value, index) => (
+                  <Stack
+                    direction="row"
+                    gap="300"
+                    justify="space-between"
+                    key={index}
+                  >
+                    <Badge
+                      colorPalette={toneToColorPalette[value.tone]}
+                      size="2xs"
+                    >
+                      {value.label}
+                    </Badge>
+                    <Text>{value.value}</Text>
+                  </Stack>
+                ))}
+              </Stack>
+            </Box>
+          )}
+          {data && (
+            <DonutChart
+              width={160}
+              formatTooltipLabel={(label) => formatNumber(label)}
+              data={data}
+            />
+          )}
+          {listData && (
+            <Stack direction="column" gap="400">
+              {listData.map((item, index) => (
+                <OrderDetailsItem {...item} key={index} />
               ))}
-            </Spacings.Stack>
-          </InfoCardBox>
-        )}
-        {data && (
-          <DonutChart
-            width={160}
-            formatTooltipLabel={(label) => {
-              return formatNumber(label);
-            }}
-            data={data}
-          />
-        )}
-        {listData && (
-          <Spacings.Stack scale={'m'}>
-            {listData.map((item, index) => {
-              return <OrderDetailsItem {...item} key={index} />;
-            })}
-          </Spacings.Stack>
-        )}
-        {ctaText && (
-          <FlatButton
-            label={ctaText}
-            as={'a'}
-            icon={<ListIcon />}
-            tone={'primary'}
-            type={'button'}
-          />
-        )}
-      </Spacings.Stack>
-    </Card>
+            </Stack>
+          )}
+          {ctaText && (
+            <Button
+              variant="ghost"
+              colorPalette="primary"
+              size={'xs'}
+              alignSelf="flex-start"
+            >
+              <Icon as={List} />
+              {ctaText}
+            </Button>
+          )}
+        </Stack>
+      </Card.Body>
+    </Card.Root>
   );
 };
 

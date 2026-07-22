@@ -2,20 +2,21 @@ import type { ReactElement } from 'react';
 import { css } from '@emotion/react';
 import { TooltipWithBounds, defaultStyles, useTooltip } from '@visx/tooltip';
 import type { Data } from './donut-chart';
-import { customProperties } from '@commercetools-uikit/design-system';
-import Spacings from '@commercetools-uikit/spacings';
+import { Box } from '@commercetools/nimbus';
 
 // Note: Without this, tooltips overlap the cursor. Adjusted as needed.
 const tooltipOffset = 24;
+
+type ShowTooltip = ReturnType<typeof useTooltip<Data>>['showTooltip'];
 
 const ChartTooltip = ({
   children,
   formatTooltipLabel,
 }: {
   children: (
-    showTooltip: (args: any) => void,
+    showTooltip: ShowTooltip,
     hideTooltip: () => void,
-    tooltipData: any
+    tooltipData: Data | undefined
   ) => ReactElement;
   formatTooltipLabel: (frequency: number) => string;
 }) => {
@@ -43,15 +44,15 @@ const ChartTooltip = ({
             top={tooltipTop}
             style={{
               ...defaultStyles,
-              backgroundColor: customProperties.colorAccent10,
-              color: customProperties.colorNeutral98,
-              borderRadius: customProperties.spacing10,
+              backgroundColor: 'var(--nimbus-colors-neutral-12)',
+              color: 'var(--nimbus-colors-neutral-1)',
+              borderRadius: '4px',
             }}
             data-testid="chart-tooltip"
           >
-            <Spacings.InsetSquish scale="s">
+            <Box paddingX="300" paddingY="150">
               {formatTooltipLabel(tooltipData.frequency)}
-            </Spacings.InsetSquish>
+            </Box>
           </TooltipWithBounds>
         )}
       {children(showTooltip, hideTooltip, tooltipData)}

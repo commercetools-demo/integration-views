@@ -1,8 +1,5 @@
 import { FC } from 'react';
-import { ContentNotification } from '@commercetools-uikit/notifications';
-import Text from '@commercetools-uikit/text';
-import Spacings from '@commercetools-uikit/spacings';
-import LoadingSpinner from '@commercetools-uikit/loading-spinner';
+import { Alert, LoadingSpinner, Stack } from '@commercetools/nimbus';
 import { PageNotFound } from '@commercetools-frontend/application-components';
 import { TColumn } from '@commercetools-uikit/data-table';
 import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
@@ -42,16 +39,16 @@ export const CustomerShoppingLists: FC<Props> = ({ id }) => {
   }));
   if (error) {
     return (
-      <ContentNotification type="error">
-        <Text.Body>{getErrorMessage(error)}</Text.Body>
-      </ContentNotification>
+      <Alert.Root colorPalette="critical">
+        <Alert.Description>{getErrorMessage(error)}</Alert.Description>
+      </Alert.Root>
     );
   }
   if (loading) {
     return (
-      <Spacings.Stack alignItems="center">
+      <Stack direction="column" align="center">
         <LoadingSpinner />
-      </Spacings.Stack>
+      </Stack>
     );
   }
   if (!shoppingLists) {
@@ -65,7 +62,7 @@ export const CustomerShoppingLists: FC<Props> = ({ id }) => {
   ];
 
   return (
-    <Spacings.Stack scale={'l'}>
+    <Stack direction="column" gap="600">
       <PaginatableDataTable
         rows={shoppingLists.results}
         visibleColumns={columns}
@@ -90,7 +87,7 @@ export const CustomerShoppingLists: FC<Props> = ({ id }) => {
           />
         </SuspendedRoute>
       </Switch>
-    </Spacings.Stack>
+    </Stack>
   );
 };
 

@@ -1,23 +1,22 @@
 import { FC, useMemo } from 'react';
 import { TLineItem } from '../../types/generated/ctp';
 import { NO_VALUE_FALLBACK } from '@commercetools-frontend/constants';
-import { ContentNotification } from '@commercetools-uikit/notifications';
-import Text from '@commercetools-uikit/text';
-import { InfoMainPage } from '@commercetools-frontend/application-components';
-import Card from '@commercetools-uikit/card';
-import Spacings from '@commercetools-uikit/spacings';
-import DataTable from '@commercetools-uikit/data-table';
-import { useCustomViewContext } from '@commercetools-frontend/application-shell-connectors';
-import Label from '@commercetools-uikit/label';
-import Grid from '@commercetools-uikit/grid';
-import OrderDetailsItem from './order-details-item';
 import {
-  PlusBoldIcon,
-  ExportIcon,
-  SpeechBubbleIcon,
-} from '@commercetools-uikit/icons';
-import SecondaryButton from '@commercetools-uikit/secondary-button';
-import PrimaryButton from '@commercetools-uikit/primary-button';
+  Alert,
+  Box,
+  Button,
+  Card,
+  DataTable,
+  Grid,
+  Heading,
+  Icon,
+  Stack,
+  Text,
+} from '@commercetools/nimbus';
+import { Add, ChatBubble, Download } from '@commercetools/nimbus-icons';
+import { InfoMainPage } from '@commercetools-frontend/application-components';
+import { useCustomViewContext } from '@commercetools-frontend/application-shell-connectors';
+import OrderDetailsItem from './order-details-item';
 import { ComponentProps } from '../../routes';
 import Steps from 'commercetools-demo-shared-stepper';
 import {
@@ -79,17 +78,17 @@ const Order: FC<ComponentProps> = ({ id }) => {
 
   if (error) {
     return (
-      <ContentNotification type="error">
-        <Text.Body>{getErrorMessage(error)}</Text.Body>
-      </ContentNotification>
+      <Alert.Root colorPalette="critical">
+        <Alert.Description>{getErrorMessage(error)}</Alert.Description>
+      </Alert.Root>
     );
   }
 
   if (!loading && !order) {
     return (
-      <ContentNotification type="info">
-        <Text.Body>No Results</Text.Body>
-      </ContentNotification>
+      <Alert.Root colorPalette="info">
+        <Alert.Description>No Results</Alert.Description>
+      </Alert.Root>
     );
   }
 
@@ -148,44 +147,41 @@ const Order: FC<ComponentProps> = ({ id }) => {
     <InfoMainPage
       title="Order Tracking Form"
       customTitleRow={
-        <Spacings.Inline justifyContent="space-between">
-          <Text.Headline as="h2">Order Tracking Form</Text.Headline>
-          <Spacings.Inline justifyContent="space-between">
-            <PrimaryButton iconLeft={<PlusBoldIcon />} label={'Open in OMS'} />
-            <SecondaryButton
-              iconLeft={<SpeechBubbleIcon />}
-              label={'Log Complaint'}
-            />
-            <SecondaryButton
-              iconLeft={<ExportIcon />}
-              label={'Export as XLS'}
-            />
-          </Spacings.Inline>
-        </Spacings.Inline>
+        <Stack direction="row" justify="space-between">
+          <Heading as="h2" size="md">
+            Order Tracking Form
+          </Heading>
+          <Stack direction="row" gap="200">
+            <Button variant="solid">
+              <Icon as={Add} />
+              Open in OMS
+            </Button>
+            <Button variant="outline">
+              <Icon as={ChatBubble} />
+              Log Complaint
+            </Button>
+            <Button variant="outline">
+              <Icon as={Download} />
+              Export as XLS
+            </Button>
+          </Stack>
+        </Stack>
       }
       subtitle={'This data is coming directly from the Order Management System'}
     >
-      <Card theme="light" type="raised">
-        <Spacings.Stack scale={'xl'}>
-          <Grid
-            gridGap="16px"
-            gridAutoColumns="1fr"
-            gridTemplateColumns="repeat(2, 1fr)"
-          >
-            <Grid.Item>
-              <DataTable<TLineItem>
-                rows={order?.lineItems || []}
-                columns={[
-                  { key: 'image', label: 'Image' },
-                  { key: 'name', label: 'Name' },
-                ]}
-                itemRenderer={(item, column) => {
-                  switch (column.key) {
-                    case 'id':
-                      return item.id;
-                    case 'image':
-                      return (
-                        <div style={{ width: '50px', height: '50px' }}>
+      <Card.Root variant="elevated">
+        <Card.Body>
+          <Stack direction="column" gap="800">
+            <Grid gap="400" templateColumns="repeat(2, 1fr)">
+              <Grid.Item>
+                <DataTable
+                  rows={order?.lineItems || []}
+                  columns={[
+                    {
+                      id: 'image',
+                      header: 'Image',
+                      accessor: (item: TLineItem) => (
+                        <Box width="1200" height="1200">
                           <img
                             src={item.variant?.images?.[0]?.url}
                             style={{
@@ -195,71 +191,76 @@ const Order: FC<ComponentProps> = ({ id }) => {
                               objectFit: 'contain',
                             }}
                           />
-                        </div>
-                      );
-                    case 'name':
-                      return formatLocalizedString(
-                        item.nameAllLocales ?? [],
-                        dataLocale,
-                        projectLanguages,
-                        NO_VALUE_FALLBACK
-                      );
-                    default:
-                      return null;
-                  }
-                }}
-              />
-            </Grid.Item>
-            <Grid.Item>
-              <Spacings.Stack>
-                <Spacings.Inline
-                  justifyContent={'space-between'}
-                  alignItems={'flex-start'}
-                  scale={'m'}
-                >
-                  <Label>Order ID:</Label>
-                  <Text.Body>{order?.id}</Text.Body>
-                </Spacings.Inline>
-                <Spacings.Inline
-                  justifyContent={'space-between'}
-                  alignItems={'flex-start'}
-                  scale={'m'}
-                >
-                  <Label>Carrier</Label>
-                  <Text.Body>DHL</Text.Body>
-                </Spacings.Inline>
-              </Spacings.Stack>
-            </Grid.Item>
-          </Grid>
-
-          <Steps steps={createStepsDefinition} activeStepKey={'InTransit'} />
-          <Grid
-            gridGap="16px"
-            gridAutoColumns="1fr"
-            gridTemplateColumns="repeat(2, 1fr)"
-          >
-            <Grid.Item>
-              <Spacings.Stack scale={'m'}>
-                {deliveryStepy.map((item, index) => {
-                  return <OrderDetailsItem {...item} key={index} />;
-                })}
-              </Spacings.Stack>
-            </Grid.Item>
-            {to.length > 0 && (
-              <Grid.Item>
-                <iframe
-                  width="100%"
-                  height="450"
-                  frameBorder={0}
-                  style={{ border: 0 }}
-                  referrerPolicy={'no-referrer-when-downgrade'}
-                  src={`https://www.google.com/maps/embed/v1/directions?key=${googleMapKey}&origin=${googleMapOrigin}&destination=${to}`}
+                        </Box>
+                      ),
+                    },
+                    {
+                      id: 'name',
+                      header: 'Name',
+                      accessor: (item: TLineItem) =>
+                        formatLocalizedString(
+                          item.nameAllLocales ?? [],
+                          dataLocale,
+                          projectLanguages,
+                          NO_VALUE_FALLBACK
+                        ),
+                    },
+                  ]}
                 />
               </Grid.Item>
-            )}
-          </Grid>
-        </Spacings.Stack>
-      </Card>
+              <Grid.Item>
+                <Stack direction="column" gap="200">
+                  <Stack
+                    direction="row"
+                    justify="space-between"
+                    align="flex-start"
+                    gap="400"
+                  >
+                    <Text as="label" fontWeight="medium">
+                      Order ID:
+                    </Text>
+                    <Text>{order?.id}</Text>
+                  </Stack>
+                  <Stack
+                    direction="row"
+                    justify="space-between"
+                    align="flex-start"
+                    gap="400"
+                  >
+                    <Text as="label" fontWeight="medium">
+                      Carrier
+                    </Text>
+                    <Text>DHL</Text>
+                  </Stack>
+                </Stack>
+              </Grid.Item>
+            </Grid>
+
+            <Steps steps={createStepsDefinition} activeStepKey={'InTransit'} />
+            <Grid gap="400" templateColumns="repeat(2, 1fr)">
+              <Grid.Item>
+                <Stack direction="column" gap="400">
+                  {deliveryStepy.map((item, index) => {
+                    return <OrderDetailsItem {...item} key={index} />;
+                  })}
+                </Stack>
+              </Grid.Item>
+              {to.length > 0 && (
+                <Grid.Item>
+                  <iframe
+                    width="100%"
+                    height="450"
+                    frameBorder={0}
+                    style={{ border: 0 }}
+                    referrerPolicy={'no-referrer-when-downgrade'}
+                    src={`https://www.google.com/maps/embed/v1/directions?key=${googleMapKey}&origin=${googleMapOrigin}&destination=${to}`}
+                  />
+                </Grid.Item>
+              )}
+            </Grid>
+          </Stack>
+        </Card.Body>
+      </Card.Root>
     </InfoMainPage>
   );
 };

@@ -1,8 +1,11 @@
 import { FC, useState } from 'react';
-import { ContentNotification } from '@commercetools-uikit/notifications';
-import Text from '@commercetools-uikit/text';
-import Spacings from '@commercetools-uikit/spacings';
-import LoadingSpinner from '@commercetools-uikit/loading-spinner';
+import {
+  Alert,
+  Button,
+  LoadingSpinner,
+  Stack,
+  Text,
+} from '@commercetools/nimbus';
 import { PageNotFound } from '@commercetools-frontend/application-components';
 import {
   getErrorMessage,
@@ -10,7 +13,6 @@ import {
   useCustomerCreateEmailVerificationToken,
   useCustomerFetcher,
 } from 'commercetools-demo-shared-data-fetching-hooks';
-import PrimaryButton from '@commercetools-uikit/primary-button';
 
 type Props = { id: string };
 
@@ -27,16 +29,16 @@ export const CustomerActions: FC<Props> = ({ id }) => {
 
   if (error) {
     return (
-      <ContentNotification type="error">
-        <Text.Body>{getErrorMessage(error)}</Text.Body>
-      </ContentNotification>
+      <Alert.Root colorPalette="critical">
+        <Alert.Description>{getErrorMessage(error)}</Alert.Description>
+      </Alert.Root>
     );
   }
   if (loading) {
     return (
-      <Spacings.Stack alignItems="center">
+      <Stack direction="column" align="center">
         <LoadingSpinner />
-      </Spacings.Stack>
+      </Stack>
     );
   }
   if (!customer) {
@@ -66,13 +68,17 @@ export const CustomerActions: FC<Props> = ({ id }) => {
   };
 
   return (
-    <Spacings.Stack scale={'l'}>
-      <Text.Detail>This customer has not yet verified their email.</Text.Detail>
-      <Spacings.Inline scale={'l'}>
-        <PrimaryButton label={'Verify now'} onClick={onClick} />
-      </Spacings.Inline>
-      <Text.Detail>{updateState}</Text.Detail>
-    </Spacings.Stack>
+    <Stack direction="column" gap="600">
+      <Text textStyle="sm">
+        This customer has not yet verified their email.
+      </Text>
+      <Stack direction="row" gap="600">
+        <Button variant="solid" onPress={onClick}>
+          Verify now
+        </Button>
+      </Stack>
+      <Text textStyle="sm">{updateState}</Text>
+    </Stack>
   );
 };
 

@@ -2,16 +2,13 @@ import { FC } from 'react';
 import PredicateConfiguratorFormikField from 'commercetools-demo-shared-predicate-builder';
 import { FormikProvider, useFormik } from 'formik';
 import { TFormValues } from './category';
-import Spacings from '@commercetools-uikit/spacings';
-import Text from '@commercetools-uikit/text';
-import PrimaryButton from '@commercetools-uikit/primary-button';
+import { Button, Heading, Stack } from '@commercetools/nimbus';
 import {
   CustomFormMainPage,
   InfoMainPage,
 } from '@commercetools-frontend/application-components';
 import { useIntl } from 'react-intl';
 import { TRawCustomField } from 'commercetools-demo-shared-helpers';
-import SecondaryButton from '@commercetools-uikit/secondary-button';
 
 export type Props = {
   existingValue?: TRawCustomField;
@@ -30,19 +27,23 @@ const CategoryPredicateField: FC<Props> = ({ existingValue, onSubmit }) => {
   return (
     <InfoMainPage
       customTitleRow={
-        <Spacings.Inline justifyContent="space-between">
-          <Text.Headline as="h1">Category View</Text.Headline>
-          <Spacings.Inline>
-            <PrimaryButton
-              onClick={formik.submitForm}
+        <Stack direction="row" justify="space-between">
+          <Heading as="h1" size="lg">
+            Category View
+          </Heading>
+          <Stack direction="row" gap="200">
+            <Button
+              variant="solid"
+              onPress={formik.submitForm}
               isDisabled={formik.isSubmitting || !formik.dirty}
-              label={intl.formatMessage(CustomFormMainPage.Intl.save)}
-            />
-            <SecondaryButton
-              label={intl.formatMessage(CustomFormMainPage.Intl.delete)}
-            />
-          </Spacings.Inline>
-        </Spacings.Inline>
+            >
+              {intl.formatMessage(CustomFormMainPage.Intl.save)}
+            </Button>
+            <Button variant="outline">
+              {intl.formatMessage(CustomFormMainPage.Intl.delete)}
+            </Button>
+          </Stack>
+        </Stack>
       }
     >
       <FormikProvider value={formik}>
