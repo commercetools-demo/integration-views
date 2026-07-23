@@ -12,8 +12,7 @@ This is a set of `custom-views` to extend the commercetools Merchant Center with
 ### Custom View for Customers
 This custom view is rendering a tabbed container displaying
 1. A dashboard of mostly static data to show how external systems could be integrated.
-2. The selected customer`s carts with the possibility of updating them.
-3. The selected customer`s shopping lists with the possibility of updating them.
+2. The selected customer`s shopping lists with the possibility of updating them.
 ### Custom View for Orders
 1. A dashboard of mostly static data to show how external systems could be integrated.
  
@@ -33,8 +32,6 @@ The `hostUriPath` is your context URL. Read more [here](https://docs.commercetoo
 
 ## Screenshots
 ![customer dashboard](./docs/customer-dashboard.png)
-![customer carts list](./docs/customer-carts-list.png)
-![customer cart](./docs/customer-cart.png)
 ![customer shopping lists](./docs/customer-shopping-lists.png)
 ![customer shopping list](./docs/customer-shopping-list.png)
 ![customer shopping list add](./docs/customer-shopping-list-add.png)
