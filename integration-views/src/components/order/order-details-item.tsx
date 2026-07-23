@@ -11,7 +11,7 @@ export type DetailsItemProps = {
 const OrderDetailsItem: FC<DetailsItemProps> = ({ date, headline, body }) => {
   return (
     <Stack direction="row" align="center">
-      <Icon as={CheckCircle} color="primary.11" />
+      <Icon as={CheckCircle} color="primary.11" size={'2xs'} />
 
       <Stack direction="column" gap="100">
         <Text textStyle="xs">

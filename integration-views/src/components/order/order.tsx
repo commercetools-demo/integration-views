@@ -1,5 +1,4 @@
 import { FC, useMemo } from 'react';
-import { TLineItem } from '../../types/generated/ctp';
 import { NO_VALUE_FALLBACK } from '@commercetools-frontend/constants';
 import {
   Alert,
@@ -11,19 +10,22 @@ import {
   Heading,
   Icon,
   Stack,
+  Steps,
   Text,
 } from '@commercetools/nimbus';
-import { Add, ChatBubble, Download } from '@commercetools/nimbus-icons';
+import { Add, Chat, Check, Download } from '@commercetools/nimbus-icons';
 import { InfoMainPage } from '@commercetools-frontend/application-components';
 import { useCustomViewContext } from '@commercetools-frontend/application-shell-connectors';
 import OrderDetailsItem from './order-details-item';
 import { ComponentProps } from '../../routes';
-import Steps from 'commercetools-demo-shared-stepper';
 import {
   getErrorMessage,
   useOrderFetcher,
 } from 'commercetools-demo-shared-data-fetching-hooks';
-import { formatLocalizedString } from 'commercetools-demo-shared-helpers';
+import {
+  formatLocalizedString,
+  TLineItem,
+} from 'commercetools-demo-shared-helpers';
 
 const Order: FC<ComponentProps> = ({ id }) => {
   const { dataLocale, projectLanguages, googleMapOrigin, googleMapKey } =
@@ -148,19 +150,19 @@ const Order: FC<ComponentProps> = ({ id }) => {
       title="Order Tracking Form"
       customTitleRow={
         <Stack direction="row" justify="space-between">
-          <Heading as="h2" size="md">
+          <Heading as="h2" size="xl">
             Order Tracking Form
           </Heading>
           <Stack direction="row" gap="200">
-            <Button variant="solid">
+            <Button colorPalette="primary">
               <Icon as={Add} />
               Open in OMS
             </Button>
-            <Button variant="outline">
-              <Icon as={ChatBubble} />
+            <Button variant="outline" colorPalette="primary">
+              <Icon as={Chat} />
               Log Complaint
             </Button>
-            <Button variant="outline">
+            <Button variant="outline" colorPalette="primary">
               <Icon as={Download} />
               Export as XLS
             </Button>
@@ -174,7 +176,7 @@ const Order: FC<ComponentProps> = ({ id }) => {
           <Stack direction="column" gap="800">
             <Grid gap="400" templateColumns="repeat(2, 1fr)">
               <Grid.Item>
-                <DataTable
+                <DataTable<TLineItem>
                   rows={order?.lineItems || []}
                   columns={[
                     {
@@ -236,7 +238,26 @@ const Order: FC<ComponentProps> = ({ id }) => {
               </Grid.Item>
             </Grid>
 
-            <Steps steps={createStepsDefinition} activeStepKey={'InTransit'} />
+            <Steps.Root count={createStepsDefinition.length} step={4}>
+              <Steps.List>
+                {createStepsDefinition.map((step, index) => {
+                  return (
+                    <Steps.Item key={step.key} index={index}>
+                      <Steps.Trigger>
+                        <Steps.Indicator>
+                          <Steps.Status
+                            complete={<Check />}
+                            incomplete={<Steps.Number />}
+                          />
+                        </Steps.Indicator>
+                        <Steps.Title>{step.label}</Steps.Title>
+                        <Steps.Separator />
+                      </Steps.Trigger>
+                    </Steps.Item>
+                  );
+                })}
+              </Steps.List>
+            </Steps.Root>
             <Grid gap="400" templateColumns="repeat(2, 1fr)">
               <Grid.Item>
                 <Stack direction="column" gap="400">
