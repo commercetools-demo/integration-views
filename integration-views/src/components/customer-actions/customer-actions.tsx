@@ -45,6 +45,8 @@ export const CustomerActions: FC<Props> = ({ id }) => {
     return <PageNotFound />;
   }
 
+  console.log(customer);
+
   const onClick = () => {
     customerCreateEmailVerificationToken({ id: id, ttlMinutes: 100 })
       .then(({ customerCreateEmailVerificationToken }) => {
@@ -73,7 +75,7 @@ export const CustomerActions: FC<Props> = ({ id }) => {
         This customer has not yet verified their email.
       </Text>
       <Stack direction="row" gap="600">
-        <Button variant="solid" onPress={onClick}>
+        <Button onPress={onClick} colorPalette="primary">
           Verify now
         </Button>
       </Stack>

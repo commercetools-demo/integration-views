@@ -45,7 +45,7 @@ const Customer: FC<ComponentProps> = ({ id }) => {
             Customer View
           </Heading>
           <Stack direction="row" gap="200">
-            <Button variant="solid" colorPalette="primary">
+            <Button colorPalette="primary">
               <Icon as={Add} />
               Open in CRM
             </Button>

@@ -73,7 +73,7 @@
     "@visx/tooltip": "^3.3.0",
     "axios": "^1.7.4",
     "commercetools-demo-shared-cart-handling": "^1.0.0",
-    "commercetools-demo-shared-data-fetching-hooks": "^1.0.1",
+    "commercetools-demo-shared-data-fetching-hooks": "^1.0.9",
     "commercetools-demo-shared-entity-selectors": "^1.0.0",
     "commercetools-demo-shared-helpers": "^1.0.1",
     "commercetools-demo-shared-paginatable-data-table": "^1.0.0",
