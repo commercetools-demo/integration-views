@@ -58,7 +58,7 @@ const InfoCard: FC<Props> = ({
   const { formatNumber } = useIntl();
   return (
     <Card.Root>
-      <Card.Header>
+      <Card.Header paddingBottom={200}>
         <Stack direction="row" gap="300" align="center" justify="flex-start">
           {icon && <Icon as={icon} color="neutral.9" size="2xs" />}
           <Text textStyle="md" color="neutral.11" fontWeight={'500'}>
