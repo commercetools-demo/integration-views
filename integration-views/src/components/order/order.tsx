@@ -17,6 +17,7 @@ import { Add, Chat, Check, Download } from '@commercetools/nimbus-icons';
 import { InfoMainPage } from '@commercetools-frontend/application-components';
 import { useCustomViewContext } from '@commercetools-frontend/application-shell-connectors';
 import OrderDetailsItem from './order-details-item';
+import OrderRouteMap from './order-route-map';
 import { ComponentProps } from '../../routes';
 import {
   getErrorMessage,
@@ -30,13 +31,13 @@ import {
 const Order: FC<ComponentProps> = ({ id }) => {
   const { dataLocale, projectLanguages, googleMapOrigin, googleMapKey } =
     useCustomViewContext((context) => {
-      const googleMapKey =
+      const googleMapKey: string | undefined =
         'googleMapKey' in context.environment
-          ? context.environment.googleMapKey
+          ? (context.environment.googleMapKey as string)
           : undefined;
-      const googleMapOrigin =
+      const googleMapOrigin: string | undefined =
         'googleMapOrigin' in context.environment
-          ? context.environment.googleMapOrigin
+          ? (context.environment.googleMapOrigin as string)
           : undefined;
       return {
         dataLocale: context.dataLocale ?? '',
@@ -94,22 +95,16 @@ const Order: FC<ComponentProps> = ({ id }) => {
     );
   }
 
-  let to: string = '';
-  if (order?.shippingAddress) {
-    const address = order?.shippingAddress;
-    if (address?.streetName) {
-      to += address?.streetName + '+';
-      if (address?.streetNumber) {
-        to += address?.streetName + '+';
-      }
-    }
-    if (address?.postalCode) {
-      to += address?.postalCode + '+';
-    }
-    if (address?.city) {
-      to += address?.city + '+';
-    }
-  }
+  const destination = order?.shippingAddress
+    ? [
+        order.shippingAddress.streetName,
+        order.shippingAddress.streetNumber,
+        order.shippingAddress.postalCode,
+        order.shippingAddress.city,
+      ]
+        .filter(Boolean)
+        .join(' ')
+    : '';
 
   const today = new Date();
   const deliveryStepy = [
@@ -266,15 +261,12 @@ const Order: FC<ComponentProps> = ({ id }) => {
                   })}
                 </Stack>
               </Grid.Item>
-              {to.length > 0 && (
+              {destination.length > 0 && googleMapKey && googleMapOrigin && (
                 <Grid.Item>
-                  <iframe
-                    width="100%"
-                    height="450"
-                    frameBorder={0}
-                    style={{ border: 0 }}
-                    referrerPolicy={'no-referrer-when-downgrade'}
-                    src={`https://www.google.com/maps/embed/v1/directions?key=${googleMapKey}&origin=${googleMapOrigin}&destination=${to}`}
+                  <OrderRouteMap
+                    apiKey={googleMapKey}
+                    origin={googleMapOrigin}
+                    destination={destination}
                   />
                 </Grid.Item>
               )}

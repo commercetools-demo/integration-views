@@ -10,7 +10,7 @@ const config = {
     development: {
       initialProjectKey: 'tech-sales-good-store',
       hostUriPath:
-        '/tech-sales-good-store/orders/9a08bc59-3709-47ab-bae9-6654b85cad08/general',
+        '/tech-sales-good-store/orders/ad5528ca-eb4f-4e7d-b353-a6ea8c904523/general',
       // '/tech-sales-good-store/customers/a5fc94a7-c479-4ed5-ac47-13d23890e725/general',
       // '/tech-sales-good-store/categories/fba234fa-cfc8-4506-ad91-dad0fe97dbc9/general',
     },
@@ -21,9 +21,17 @@ const config = {
   },
   headers: {
     csp: {
-      'script-src': ['*.fullstory.com/'],
-      'connect-src': ['https://www.google.com/', 'https://api.trello.com'],
-      'frame-src': ['https://www.google.com/'],
+      'script-src': [
+        '*.fullstory.com/',
+        '*.google.com/',
+        '*.googleapis.com/',
+      ],
+      'connect-src': [
+        'https://www.google.com/',
+        'https://api.trello.com',
+        '*.googleapis.com/',
+      ],
+      'img-src': ['*.googleapis.com/', '*.gstatic.com/', '*.ggpht.com/'],
     },
   },
   oAuthScopes: {
