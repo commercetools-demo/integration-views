@@ -11,7 +11,7 @@ const config = {
       initialProjectKey: 'tech-sales-good-store',
       hostUriPath:
         // '/tech-sales-good-store/orders/9a08bc59-3709-47ab-bae9-6654b85cad08/general',
-        '/tech-sales-good-store/customers/691815e7-6129-49fc-b6d3-300709664bec/general',
+        '/tech-sales-good-store/customers/a5fc94a7-c479-4ed5-ac47-13d23890e725/general',
       // '/tech-sales-good-store/categories/fba234fa-cfc8-4506-ad91-dad0fe97dbc9/general',
     },
     production: {

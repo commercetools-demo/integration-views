@@ -1,9 +1,14 @@
-import { FC } from 'react';
-import { Alert, LoadingSpinner, Stack } from '@commercetools/nimbus';
+import { FC, useState } from 'react';
+import {
+  Alert,
+  DataTable,
+  DataTableColumnItem,
+  LoadingSpinner,
+  Pagination,
+  Stack,
+} from '@commercetools/nimbus';
 import { PageNotFound } from '@commercetools-frontend/application-components';
-import { TColumn } from '@commercetools-uikit/data-table';
 import { useApplicationContext } from '@commercetools-frontend/application-shell-connectors';
-import { usePaginationState } from '@commercetools-uikit/hooks';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import {
   getErrorMessage,
@@ -13,24 +18,20 @@ import { TShoppingList } from '../../types/generated/ctp';
 import { SuspendedRoute } from '@commercetools-frontend/application-shell';
 import { Switch } from 'react-router';
 import CustomerShoppingList from '../customer-shopping-list/customer-shopping-list';
-import { PaginatableDataTable } from 'commercetools-demo-shared-paginatable-data-table';
-import {
-  defaultShoppingListsColumnsDefinition,
-  defaultShoppingListsItemRenderer,
-} from 'commercetools-demo-shared-cart-handling';
-import { useIntl } from 'react-intl';
+import { formatLocalizedString } from 'commercetools-demo-shared-helpers';
+import { NO_VALUE_FALLBACK } from '@commercetools-frontend/constants';
 
 type Props = { id: string };
 
 export const CustomerShoppingLists: FC<Props> = ({ id }) => {
-  const intl = useIntl();
-  const paginationState = usePaginationState();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(20);
   const { push } = useHistory();
   const match = useRouteMatch();
 
   const { shoppingLists, loading, error, refetch } = useShoppingListsFetcher({
-    limit: paginationState.perPage.value,
-    offset: (paginationState.page.value - 1) * paginationState.perPage.value,
+    limit: pageSize,
+    offset: (currentPage - 1) * pageSize,
     where: `customer(id="${id}")`,
   });
   const { dataLocale, projectLanguages } = useApplicationContext((context) => ({
@@ -54,29 +55,45 @@ export const CustomerShoppingLists: FC<Props> = ({ id }) => {
   if (!shoppingLists) {
     return <PageNotFound />;
   }
-  const columns: Array<TColumn<TShoppingList>> = [
-    // { key: 'id', label: 'ID' },
-    { key: 'name', label: 'Name' },
-    { key: 'count', label: 'Line Item count' },
-    // { key: 'customer', label: 'Customer' },
+
+  const columns: Array<DataTableColumnItem<TShoppingList>> = [
+    {
+      id: 'name',
+      header: 'Name',
+      accessor: (row) => {
+        return formatLocalizedString(
+          row.nameAllLocales,
+          dataLocale,
+          projectLanguages,
+          NO_VALUE_FALLBACK
+        );
+      },
+    },
+    {
+      id: 'count',
+      header: 'Line Item count',
+      accessor: (row) => row.lineItems?.reduce((a, c) => a + c.quantity, 0),
+    },
   ];
 
   return (
     <Stack direction="column" gap="600">
-      <PaginatableDataTable
+      <DataTable<TShoppingList>
+        columns={columns}
         rows={shoppingLists.results}
-        visibleColumns={columns}
-        columns={defaultShoppingListsColumnsDefinition({ intl })}
-        itemRenderer={defaultShoppingListsItemRenderer(
-          dataLocale,
-          projectLanguages
-        )}
         onRowClick={(row) => {
           push(`${match.url}/${row.id}`);
         }}
-        paginationState={paginationState}
-        totalItems={shoppingLists.total}
       />
+      {shoppingLists.total > currentPage && (
+        <Pagination
+          totalItems={shoppingLists.total}
+          currentPage={currentPage}
+          pageSize={pageSize}
+          onPageChange={setCurrentPage}
+          onPageSizeChange={setPageSize}
+        />
+      )}
       <Switch>
         <SuspendedRoute path={`${match.path}/:id`}>
           <CustomerShoppingList
